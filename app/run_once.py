@@ -36,16 +36,20 @@ def save_state(path: Path, state: dict) -> None:
     )
 
 
+def _parse_chat_ids(raw: str) -> list[str]:
+    return [c.strip() for c in raw.split(",") if c.strip()]
+
+
 def main() -> None:
     load_dotenv()
     token = os.getenv("TELEGRAM_BOT_TOKEN", "").strip()
-    chat_id = os.getenv("TELEGRAM_CHAT_ID", "").strip()
+    chat_ids = _parse_chat_ids(os.getenv("TELEGRAM_CHAT_ID", ""))
     raw_filter = os.getenv("BRANCH_FILTER", "").strip()
     branch_filter = [b.strip().lower() for b in raw_filter.split(",") if b.strip()]
 
     if not token:
         raise ValueError("TELEGRAM_BOT_TOKEN is required.")
-    if not chat_id:
+    if not chat_ids:
         raise ValueError("TELEGRAM_CHAT_ID is required for GitHub Actions mode.")
 
     client = IraqiCinemaClient()
@@ -81,11 +85,15 @@ def main() -> None:
 
         state["initialized"] = True
         save_state(STATE_FILE, state)
-        bot.send_message(
-            chat_id,
+        init_msg = (
             f"✅ <b>تم تفعيل مراقب Iraqi Cinema على GitHub Actions!</b>\n"
-            f"تم تسجيل <b>{len(seen)}</b> فلم متاح حالياً، وسأرسل لك إشعاراً فورياً عند فتح الحجز لأي فلم جديد.",
+            f"تم تسجيل <b>{len(seen)}</b> فلم متاح حالياً، وسأرسل لك إشعاراً فورياً عند فتح الحجز لأي فلم جديد."
         )
+        for cid in chat_ids:
+            try:
+                bot.send_message(cid, init_msg)
+            except Exception as exc:
+                logger.error("Failed sending init message to %s: %s", cid, exc)
         logger.info("Initialized state with %d movies.", len(seen))
         return
 
@@ -127,10 +135,12 @@ def main() -> None:
                     branches=filtered_branches,
                     detail_url=details.detail_url,
                 )
-                bot.send_message(
-                    chat_id,
-                    format_movie_notification(filtered_details, is_new=True),
-                )
+                msg_text = format_movie_notification(filtered_details, is_new=True)
+                for cid in chat_ids:
+                    try:
+                        bot.send_message(cid, msg_text)
+                    except Exception as exc:
+                        logger.error("Failed sending alert to %s: %s", cid, exc)
                 new_alerts += 1
                 logger.info("Sent Telegram alert for '%s'", m.title)
 
