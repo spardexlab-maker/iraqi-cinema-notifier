@@ -11,6 +11,23 @@ logger = logging.getLogger(__name__)
 
 _TELEGRAM_LIMIT = 4000
 
+MAIN_KEYBOARD = {
+    "keyboard": [
+        [{"text": "🎬 الأفلام المتاحة الآن"}, {"text": "🔍 فحص فوري"}],
+        [{"text": "🏛 تحديد السينمات"}, {"text": "📊 حالة البوت"}],
+    ],
+    "resize_keyboard": True,
+    "is_persistent": True,
+}
+
+BOT_COMMANDS = [
+    {"command": "now", "description": "عرض الأفلام المتاحة للحجز حالياً"},
+    {"command": "cinemas", "description": "تحديد السينمات المفضلة"},
+    {"command": "check", "description": "فحص فوري للأفلام الجديدة"},
+    {"command": "status", "description": "حالة البوت وآخر فحص"},
+    {"command": "start", "description": "تفعيل الإشعارات وعرض الأزرار"},
+]
+
 
 def format_movie_notification(details: MovieDetails, is_new: bool = True) -> str:
     """Format a movie's booking availability into an HTML Telegram message."""
@@ -89,19 +106,25 @@ class TelegramBotClient:
         self.base_url = f"https://api.telegram.org/bot{token}"
         self.timeout = timeout
 
-    def send_message(self, chat_id: str, text: str) -> None:
+    def send_message(
+        self,
+        chat_id: str,
+        text: str,
+        reply_markup: dict | None = None,
+    ) -> None:
         url = f"{self.base_url}/sendMessage"
+        chunks = split_message(text)
         with httpx.Client(timeout=self.timeout) as client:
-            for chunk in split_message(text):
-                resp = client.post(
-                    url,
-                    json={
-                        "chat_id": chat_id,
-                        "text": chunk,
-                        "parse_mode": "HTML",
-                        "disable_web_page_preview": True,
-                    },
-                )
+            for idx, chunk in enumerate(chunks):
+                payload: dict = {
+                    "chat_id": chat_id,
+                    "text": chunk,
+                    "parse_mode": "HTML",
+                    "disable_web_page_preview": True,
+                }
+                if reply_markup is not None and idx == len(chunks) - 1:
+                    payload["reply_markup"] = reply_markup
+                resp = client.post(url, json=payload)
                 if resp.status_code >= 400:
                     logger.error(
                         "Telegram sendMessage failed (%s): %s",
@@ -109,6 +132,13 @@ class TelegramBotClient:
                         resp.text,
                     )
                     resp.raise_for_status()
+
+    def set_my_commands(self) -> None:
+        url = f"{self.base_url}/setMyCommands"
+        with httpx.Client(timeout=self.timeout) as client:
+            resp = client.post(url, json={"commands": BOT_COMMANDS})
+            if resp.status_code >= 400:
+                logger.warning("Failed to setMyCommands: %s", resp.text)
 
     def get_updates(self, offset: int | None = None, poll_timeout: int = 20) -> list[dict]:
         url = f"{self.base_url}/getUpdates"
