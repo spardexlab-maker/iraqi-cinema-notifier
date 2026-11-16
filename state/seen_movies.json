@@ -1,0 +1,70 @@
+{
+  "initialized": true,
+  "movies": {
+    "391": {
+      "title": "Avengers: Doomsday",
+      "slug": "avengers:-doomsday",
+      "first_seen_at": "2026-11-16T07:15:46.418224+00:00"
+    },
+    "450": {
+      "title": "حدوتة",
+      "slug": "حدوتة",
+      "first_seen_at": "2026-11-16T07:15:46.418224+00:00"
+    },
+    "477": {
+      "title": "Ebenezer: A Christmas Carol",
+      "slug": "Ebenezer: A Christmas Carol",
+      "first_seen_at": "2026-11-16T07:15:46.418224+00:00"
+    },
+    "445": {
+      "title": "I Play Rocky",
+      "slug": "i-play-rocky",
+      "first_seen_at": "2026-11-16T07:15:46.418224+00:00"
+    },
+    "442": {
+      "title": "Qareen",
+      "slug": "qareen",
+      "first_seen_at": "2026-11-16T07:15:46.418224+00:00"
+    },
+    "441": {
+      "title": "Godzilla Minus Zero",
+      "slug": "godzilla-minus-zero",
+      "first_seen_at": "2026-11-16T07:15:46.418224+00:00"
+    },
+    "471": {
+      "title": "Azem 6: Mühür",
+      "slug": "Azem 6: Mühür",
+      "first_seen_at": "2026-11-16T07:15:46.418224+00:00"
+    },
+    "436": {
+      "title": "مطلوب عائلياً",
+      "slug": "مطلوب-عائلياً",
+      "first_seen_at": "2026-11-16T07:15:46.418224+00:00"
+    },
+    "430": {
+      "title": "ولا كان عالبال",
+      "slug": "ولا-كان-عالبال",
+      "first_seen_at": "2026-11-16T07:15:46.418224+00:00"
+    },
+    "335": {
+      "title": "How to Rob a Bank",
+      "slug": "how-to-rob-a-bank",
+      "first_seen_at": "2026-11-16T07:15:46.418224+00:00"
+    },
+    "451": {
+      "title": "Best Pancakes in the County",
+      "slug": "best-pancakes-in-the-county",
+      "first_seen_at": "2026-11-16T07:15:46.418224+00:00"
+    },
+    "482": {
+      "title": "Into The Wonderwoods",
+      "slug": "into-the-wonderwoods",
+      "first_seen_at": "2026-11-16T07:15:46.418224+00:00"
+    },
+    "446": {
+      "title": "Wildwood",
+      "slug": "wildwood",
+      "first_seen_at": "2026-11-16T07:15:46.418224+00:00"
+    }
+  }
+}
