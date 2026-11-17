@@ -65,9 +65,19 @@
       "title": "Wildwood",
       "slug": "wildwood",
       "first_seen_at": "2026-11-16T07:15:46.418224+00:00"
+    },
+    "339": {
+      "title": "Clayface",
+      "slug": "clayface",
+      "first_seen_at": "2026-11-17 00:46:50 UTC"
+    },
+    "404": {
+      "title": "The Mongoose",
+      "slug": "the-mongoose",
+      "first_seen_at": "2026-11-17 00:46:50 UTC"
     }
   },
   "branch_filters": {},
-  "last_check_at": "2026-11-16 17:07:00 UTC",
+  "last_check_at": "2026-11-17 00:46:50 UTC",
   "last_update_id": 26509664
 }
